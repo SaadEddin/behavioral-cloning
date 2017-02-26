@@ -72,7 +72,7 @@ The two figures below shows an image from a center camera before and after cropp
 
 * Flipping images: Randomly mirror the image L->R or R->L and multiply the angle by -1, based on a coin flip. This is performed on the training data only by the generator, to enrich the dataset.
 
-'''python
+```python
 def flip(img, steer_angle):
     """
     :param img: camera input
@@ -83,10 +83,11 @@ def flip(img, steer_angle):
     new_img = cv2.flip(img, 1)
     new_angle = steer_angle*(-1)
     return new_img, new_angle
- '''
+```
 
 * Random Brightness changes: Used by the generator for training data only, to convert the image to HSV space and multiply the V channel with a random number from a uniform distribution in the range of [0.25 - 1.0] to make the model generalize to environments with different brightness levels.
-'''python
+
+```python
 
 def random_brightness(img):
     """
@@ -101,7 +102,7 @@ def random_brightness(img):
     hsv_img[:, :, 2] = rand*hsv_img[:, :, 2]
     new_img = cv2.cvtColor(hsv_img, cv2.COLOR_HSV2RGB)
     return new_img
-'''
+```
 
 
 ### [Generator Functions](#section_1)
