@@ -107,7 +107,57 @@ def random_brightness(img):
 
 ### [Generator Functions](#section_1)
 
+Instead of loading all the data into the RAM, Python generators will be used to load the data batch by batch of 200 images each. Two generator functions are used, one for training and one for validation.
+
+##### Training Data Generator
+
+The generator randomly chooses 200 (batch_size) images from the training set, and applies the preprocessing steps on each image. Each image is cropped, resized, and a random brightness information followed by a a flip (with 50% probability).
+
+When 200 images are read, preprocessed and stored into the RAM, the generator yields these images with their angles to the model to perform the training.
+
+```python
+def generator_data(batch_size):
+    batch_train = np.zeros((batch_size, 64, 64, 3), dtype=np.float32)
+    batch_angle = np.zeros((batch_size,), dtype=np.float32)
+
+    while True:
+        data, angle = shuffle(X_train, y_train)
+        for i in range(batch_size):
+            choice = int(np.random.choice(len(data), 1))
+            batch_train[i] = crop_resize(random_brightness(mpimg.imread(data[choice].strip())))
+            batch_angle[i] = angle[choice] * (1 + np.random.uniform(-0.05, 0.05))
+            flip_coin = random.randint(0, 1)
+            if flip_coin == 1:
+                batch_train[i], batch_angle[i] = flip(batch_train[i], batch_angle[i])
+        yield batch_train, batch_angle
+
+``` 
+
+##### Validation Data Generator
+
+The validation data generator works the same way as the training data generator, except for skipping the flipping and random-brightness adjustment operations. This is used to evaluate the model performance on the validation set during model building.
+
+```python
+def generator_valid(data, angle, batch_size):
+    batch_train = np.zeros((batch_size, 64, 64, 3), dtype=np.float32)
+    batch_angle = np.zeros((batch_size,), dtype=np.float32)
+    while True:
+        data, angle = shuffle(data, angle)
+        for i in range(batch_size):
+            rand = int(np.random.choice(len(data), 1))
+            batch_train[i] = crop_resize(mpimg.imread(data[rand].strip()))
+            batch_angle[i] = angle[rand]
+        yield batch_train, batch_angle
+
+```
+
 ### [Model Architecture](#section_2)
+
+The figure below shows the model architecture. 
+
+![{model_arch}](figs/model_architecture.png)
+
+
 
 ### [Model Training](#section_3)
 
