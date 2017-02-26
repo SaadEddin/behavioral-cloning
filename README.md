@@ -24,6 +24,23 @@ This dataset is imbalanced since the majority of datapoints are within a small r
 
 ![{udacity_data_hist}](figs/udacity_data.png)
 
+Some ways to enrich the data with more left/right turn points is to record using manual driving in the simulator, and add a recovery angle to the images from the left/right camera and add them to the dataset as their own points.
+
+For sharp turn data, I used [this small data set](https://github.com/cssomnath/udacity-sdc/blob/master/carnd-projects/CarND-Behavioral-Cloning/sharp_turn.zip "Sharp Turn data") recorded by another Udacity SDC student (Kudos to [Somnath Banerjee](https://github.com/cssomnath Somnath Banerjee)) and combined it with the Udacity data set, as recording data using keyboard/mouse does not capture angles smoothly. The histogram for the sharp-turn data is \ref{sharp_turn_hist}.
+
+
+
+```python
+header_row = ['center', 'left', 'right', 'steering', 'throttle', 'brake', 'speed']
+udacity_data = pd.read_csv('driving_log.csv', skiprows=[0], names=header_row)
+sharp_turn_data = pd.read_csv('sharp_turn.csv')
+
+# Combine the two data sources ...
+data = pd.concat([udacity_data, sharp_turn_data])
+```
+
+
+![{sharp_turn_hist}](figs/sharp_turn_data.png)
 
 
 ### [Generator Functions](#section_1)
