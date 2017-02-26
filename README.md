@@ -18,6 +18,14 @@ The model parameters file and a video of a full round in each track are provided
 
 ### [Data: Sources, Exploration and Enrichment](#section_0)
 
+Two sources of data are used for training the model in this project. The first source is Udacity's own data. Each data point provides 3 images from three cameras at the front hood cover of the car (left, center and right), along with speed, throttle, break and steering angle.
+
+This dataset is imbalanced since the majority of datapoints are within a small range from straight driving (within the range of -0.15 to 0.15). See figure \ref{udacity_data_hist} for the histogram of steering angle values.Training the model using this source provided very unreliable results in the simulator.
+
+![{udacity_data_hist}](figs/udacity_data.png)
+
+
+
 ### [Generator Functions](#section_1)
 
 ### [Model Architecture](#section_2)
