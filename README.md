@@ -6,17 +6,17 @@ This is the third project in the [SDC Engineer Nanodegree](https://www.udacity.c
 
 This README is structured as follows: 
 
-* [Data: Sources, Exploration, Enrichment and Preprocessing](#section_0).
-* [Generator Functions](#section_1) for the training and validation data.
-* [Model Architecture](#section_2) Description of the layers, overfitting methods, etc.
-* [Model Training](#section_3)
-* [Discussion](#section_4)
-* [Results](#section_5)
+* [Data: Sources, Exploration, Enrichment and Preprocessing](#section-0).
+* [Generator Functions](#section-1) for the training and validation data.
+* [Model Architecture](#section-2) Description of the layers, overfitting methods, etc.
+* [Model Training](#section-3)
+* [Discussion](#section-4)
+* [Results](#section-5)
 
 The model parameters file and a video of a full round in each track are provided.
 
 
-### [Data: Sources, Exploration, Enrichment and Preprocessing](#section_0)
+### [Data: Sources, Exploration, Enrichment and Preprocessing](#section-0)
 
 Two sources of data are used for training the model in this project. The first source is Udacity's own data. Each data point provides 3 images from three cameras at the front hood cover of the car (left, center and right), along with speed, throttle, break and steering angle.
 
@@ -113,7 +113,7 @@ def random_brightness(img):
 
 
 
-### [Generator Functions](#section_1)
+### [Generator Functions](#section-1)
 
 Instead of loading all the data into the RAM, Python generators will be used to load the data batch by batch of 200 images each. Two generator functions are used, one for training and one for validation.
 
@@ -159,7 +159,7 @@ def generator_valid(data, angle, batch_size):
 
 ```
 
-### [Model Architecture](#section_2)
+### [Model Architecture](#section-2)
 
 The figure below shows the model architecture, which is inspired by the [End to End Learning for Self-Driving Cars](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf "NVIDIA Paper") with some modifications. First, the image is normalized by making the pixel values within the range [-0.5 to 0.5].
 
@@ -183,11 +183,11 @@ The tweaks and modifications to the NVIDIA paper are a result of multiple iterat
 
 I use the [Adam Optimizer]("Adam Optimizer")
 
-### [Model Training](#section_3)
+### [Model Training](#section-3)
 
-### [Discussion](#section_4)
+### [Discussion](#section-4)
 
-### [Results](#section_5)
+### [Results](#section-5)
 
 
 
