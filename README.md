@@ -6,15 +6,15 @@ This is the third project in the [SDC Engineer Nanodegree](https://www.udacity.c
 
 This README is structured as follows: 
 
-* [Data: Sources, Exploration, Enrichment and Preprocessing](#section-0).
-* [Generator Functions](#section-1) for the training and validation data.
-* [Model Architecture and Training](#section-2) Description of the layers, overfitting methods, etc.
-* [Results and Further Improvements](#section-3)
+* Data: Sources, Exploration, Enrichment and Preprocessing.
+* Generator Functions for the training and validation data.
+* Model Architecture and Training Description of the layers, overfitting methods, etc.
+* Results and Further Improvements
 
 The model parameters file and a video of a full round in each track are provided.
 
 
-### [Data: Sources, Exploration, Enrichment and Preprocessing](#section-0)
+### Data: Sources, Exploration, Enrichment and Preprocessing
 
 Two sources of data are used for training the model in this project. The first source is Udacity's own data. Each data point provides 3 images from three cameras at the front hood cover of the car (left, center and right), along with speed, throttle, break and steering angle.
 
@@ -110,7 +110,7 @@ def random_brightness(img):
 
 The data was divited into 90% **training** and 10% **validation** sets, and then randomly shuffled. I think this split was not necessary at all, since the validation error is not reflective of the model's performance on the simulator's track. For example, in earlier trials I got lower validation error but very bad performance on the track, and my final working solution did not have the lowest validation error of all the trials.
 
-### [Generator Functions](#section-1)
+### Generator Functions
 
 Instead of loading all the data into the RAM, Python generators will be used to load the data batch by batch of 200 images each. Two generator functions are used, one for training and one for validation.
 
@@ -156,7 +156,7 @@ def generator_valid(data, angle, batch_size):
 
 ```
 
-### [Model Architecture and Training](#section-2)
+### Model Architecture and Training
 
 The figure below shows the model architecture, which is inspired by the [End to End Learning for Self-Driving Cars](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf "NVIDIA Paper") with some modifications. First, the image is normalized by making the pixel values within the range [-0.5 to 0.5].
 
@@ -190,7 +190,7 @@ I use the [Adam Optimizer](https://arxiv.org/pdf/1412.6980.pdf "Adam Optimizer")
 keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 ```
 
-### [Results and Further Improvements](#section-3)
+### Results and Further Improvements
 
 The provided video files shows that the model can drive the car on both tracks. At some straight portions of the road, the steering angle seems to be changing quite a bit. I would attribute this to overfitting, and to get rid of it, I'd tweak the model architecture a bit more using some of these adjustments:
 
