@@ -8,10 +8,8 @@ This README is structured as follows:
 
 * [Data: Sources, Exploration, Enrichment and Preprocessing](#section-0).
 * [Generator Functions](#section-1) for the training and validation data.
-* [Model Architecture](#section-2) Description of the layers, overfitting methods, etc.
-* [Model Training](#section-3)
-* [Discussion](#section-4)
-* [Results](#section-5)
+* [Model Architecture and Training](#section-2) Description of the layers, overfitting methods, etc.
+* [Results and Further Improvements](#section-3)
 
 The model parameters file and a video of a full round in each track are provided.
 
@@ -110,8 +108,7 @@ def random_brightness(img):
     return new_img
 ```
 
-
-
+The data was divited into 90% **training** and 10% **validation** sets, and then randomly shuffled. I think this split was not necessary at all, since the validation error is not reflective of the model's performance on the simulator's track. For example, in earlier trials I got lower validation error but very bad performance on the track, and my final working solution did not have the lowest validation error of all the trials.
 
 ### [Generator Functions](#section-1)
 
@@ -159,37 +156,53 @@ def generator_valid(data, angle, batch_size):
 
 ```
 
-### [Model Architecture](#section-2)
+### [Model Architecture and Training](#section-2)
 
 The figure below shows the model architecture, which is inspired by the [End to End Learning for Self-Driving Cars](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf "NVIDIA Paper") with some modifications. First, the image is normalized by making the pixel values within the range [-0.5 to 0.5].
 
 The main modifications are:
 
-1- Input size: I reduced the spatial input size to be 64x64 instead of 66x200, to reduce the number of parameters. 
+- Input size: I reduced the spatial input size to be 64x64 instead of 66x200, to reduce the number of parameters. 
 
-2- An additional convolutional layer before the flattening layer: This is based on a suggestion of another Udacity student.
+- An additional convolutional layer before the flattening layer: This is based on a suggestion of another Udacity student.
 
-3- Subsampling in the first 3 convolutional layers, instead of the strides.
-
-4- Dropout layers with probability of 0.5 to avoid overfitting.
+- Subsampling in the first 3 convolutional layers, instead of the strides.
 
 In addition, there were also some tweaks fully connected layers.
 
 
-The tweaks and modifications to the NVIDIA paper are a result of multiple iterations: I trained the model using the original architecture, and the car kept falling in the lake. 
+The tweaks and modifications to the NVIDIA paper are a result of multiple iterations: I trained the model using the original architecture, and the car kept falling in the lake. After multiple trials and modifications, the trained model can make a full lab in both tracks.
+
+The main adjustmnets I made after each failed trial in the simulator falls into one of these categoris:
+
+- Re-balancing the data: making adjustments to the way I equalize the histogram of steering angels.
+
+- Reducing the number of parameters: I started by resizing the input image to a smaller spatial space, and applyig a 2x2 subsampling on the first 3 convolutional layers. But in the end, I ended up having more trainable params than the original nvidia model due to an extra convolutional layer added before the flattening layer.
+
+To reduce overfitting, we use a dropout layer after the flattening layer, and the two FC layers. Also, to ensure that the model would generalize well, I tested the performance on both tracks in the simulator.
 
 
 ![{model_arch}](figs/model_architecture.png)
 
-I use the [Adam Optimizer]("Adam Optimizer")
+I use the [Adam Optimizer](https://arxiv.org/pdf/1412.6980.pdf "Adam Optimizer") with the default parameters, which is adaptive: It only needs an initial learning rate value, and it attempts to keep the learning rate as large as possible while maintaining the stability of the learning process. The learning rate is made responsive to the complexity of the local error surface.
 
-### [Model Training](#section-3)
+```python
+keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+```
 
-### [Discussion](#section-4)
+### [Results and Further Improvements](#section-3)
 
-### [Results](#section-5)
+The provided video files shows that the model can drive the car on both tracks. At some straight portions of the road, the steering angle seems to be changing quite a bit. I would attribute this to overfitting, and to get rid of it, I'd tweak the model architecture a bit more using some of these adjustments:
 
+* Start with a larger image as input to the model, and increase the number of layers, while adding more dropout layers after the initial convolutional layers and the initial FC Layers.
 
+* Improving the data further more, by recording more data for each angle-range category.
+
+* Change the filter size, subsampling techniques and try Maxpooling layers.
+
+There are many other ways to experiment with, as the hyperparameter space is really large.
+
+This is a [link to the car driving in the first track](https://www.youtube.com/watch?v=T5IZ3tqPLoU "Track 1") and the [second track](https://www.youtube.com/watch?v=N9Fc_ej1LkI "Track 2").
 
 
 
